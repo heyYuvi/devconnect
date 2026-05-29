@@ -3,6 +3,8 @@ import connectDb from "./config/db.js"
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import protect from "./middleware/authMiddleware.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -12,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) =>{
+app.get("/", protect, (req, res) =>{
     res.json({
         success: true,
         message: "DevConnect is Running"
@@ -20,6 +22,7 @@ app.get("/", (req, res) =>{
 });
 
 app.use("/api", authRoutes);
+app.use("/api", userRoutes)
 
 const startServer = async () =>{
     try{

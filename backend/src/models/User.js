@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -17,6 +17,13 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    username: {
+        type: String,
+        unique: true,
+        sparse: true,
+        lowercase: true,
+        trim: true,
     },
     avatar: {
         type: String,
