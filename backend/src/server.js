@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import protect from "./middleware/authMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.get("/", protect, (req, res) =>{
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", postRoutes);
+app.use("/api", commentRoutes);
 
 const startServer = async () =>{
     try{
