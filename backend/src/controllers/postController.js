@@ -225,3 +225,60 @@ export const feed = async (req, res) =>{
         });
     }
 }
+
+// Toggle Like
+
+export const toggleLike = async (req, res) =>{
+    try{
+        const postId = req.params.id;
+    if(!mongoose.Types.ObjectId.isValid(postId)){
+        return res.status(400).json({
+            success: false,
+            message: "Invalid Post Id"
+        });
+    }
+
+    const post = await Post.findById(postId).populate("author", "name username avatar");
+    if(!post){
+        return res.status(404).json({
+            success: false,
+            message: "Post Not Found"
+        });
+    }
+
+    const liked = post.likes.some((userId) => userId.toString() === req.user._id.toString() );
+    if(liked){
+        post.likes.pull(req.user._id);
+        console.log("Unliked");
+    }else{
+        post.likes.push(req.user._id);
+        console.log("Liked");
+    }
+
+    await post.save();
+
+    return res.status(200).json({
+        success: true,
+        data: {
+                id: post._id,
+                content: post.content,
+                image: post.image,
+                author: {
+                    id: post.author._id,
+                    name: post.author.name,
+                    username: post.author.username,
+                    avatar: post.author.avatar
+                },
+                createdAt: post.createdAt,
+                totalLikes: post.likes.length,
+                liked: !liked
+            }
+    });
+    }catch(error){
+        console.log("Toggle Like Error", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+    }
+}
