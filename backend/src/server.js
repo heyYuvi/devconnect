@@ -5,6 +5,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import protect from "./middleware/authMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 
 dotenv.config();
 
@@ -22,7 +23,8 @@ app.get("/", protect, (req, res) =>{
 });
 
 app.use("/api", authRoutes);
-app.use("/api", userRoutes)
+app.use("/api", userRoutes);
+app.use("/api", postRoutes);
 
 const startServer = async () =>{
     try{
